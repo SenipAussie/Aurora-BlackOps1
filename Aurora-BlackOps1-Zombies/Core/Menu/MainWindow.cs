@@ -27,7 +27,7 @@ namespace Aurora_BlackOps1_Zombies
         TeleportsPanel TP = new TeleportsPanel() { TopLevel = false, TopMost = false };
         private void InitiatePanels()
         {
-            User32.RegisterHotKey(this.Handle, 0, (int)KeyModifier.None, Keys.Insert.GetHashCode());
+            DLLImports.RegisterHotKey(this.Handle, 0, (int)KeyModifier.None, Keys.Insert.GetHashCode());
             pnlPage.Controls.Add(GP);
             pnlPage.Controls.Add(TP);
             GP.Show();
@@ -103,15 +103,15 @@ namespace Aurora_BlackOps1_Zombies
         private void Closing()
         {
             WaitingForClose.Dispose();
-            User32.UnregisterHotKey(this.Handle, 0);
-            MemoryHandler.m.CloseProcess();
+            DLLImports.UnregisterHotKey(this.Handle, 0);
+            ProcessInfo.GameProcess.Close();
             GP.Dispose();
             TP.Dispose();
             this.Dispose();
         }
         private void WaitingForClose_Tick(object sender, EventArgs e)
         {
-            if (!MemoryHandler.isOpen())
+            if (!ProcessHandler.isOpen())
                 Closing();
         }
         private void AuroraBlackOps1_FormClosing(object sender, FormClosingEventArgs e) { Closing(); }

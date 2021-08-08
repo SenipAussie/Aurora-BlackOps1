@@ -36,9 +36,6 @@
     <ApplicationIcon>Aurora.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Memory, Version=1.2.21.0, Culture=neutral, processorArchitecture=x86">
-      <HintPath>..\packages\Memory.dll.x86.1.2.22\lib\netstandard2.0\Memory.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Security.Principal.Windows, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -55,8 +52,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\Data\DLLImports.cs" />
     <Compile Include="Core\Data\MemoryHandler.cs" />
-    <Compile Include="Core\Data\User32.cs" />
+    <Compile Include="Core\Data\ProcessHandler.cs" />
     <Compile Include="Core\Data\Variables.cs" />
     <Compile Include="Core\Menu\MainWindow.cs">
       <SubType>Form</SubType>
@@ -97,7 +95,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

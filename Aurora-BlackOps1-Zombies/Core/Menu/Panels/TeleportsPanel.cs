@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using static Aurora_BlackOps1_Zombies.Core.Data.ProcessHandler;
 using static Aurora_BlackOps1_Zombies.Core.Data.MemoryHandler;
 using static Aurora_BlackOps1_Zombies.Core.Data.Variables;
 
@@ -17,9 +18,9 @@ namespace Aurora_BlackOps1_Zombies.Core.Menu.Panels
         {
             if (isOpen())
             {
-                txtCurrentX.Text = ReadFromMemory(Teleports.CurrentXOffSet).ToString();
-                txtCurrentY.Text = ReadFromMemory(Teleports.CurrentYOffSet).ToString();
-                txtCurrentZ.Text = ReadFromMemory(Teleports.CurrentZOffSet).ToString();
+                txtCurrentX.Text = ReadFloat(false, Teleports.CurrentXPointer).ToString();
+                txtCurrentY.Text = ReadFloat(false, Teleports.CurrentYPointer).ToString();
+                txtCurrentZ.Text = ReadFloat(false, Teleports.CurrentZPointer).ToString();
             }
             else { this.Close(); }
         }
@@ -55,9 +56,9 @@ namespace Aurora_BlackOps1_Zombies.Core.Menu.Panels
             Teleports.ManualX = float.Parse(txtManualX.Text);
             Teleports.ManualY = float.Parse(txtManualY.Text);
             Teleports.ManualZ = float.Parse(txtManualZ.Text);
-            WriteToMemory(Teleports.CurrentXOffSet, "float", Teleports.ManualX.ToString());
-            WriteToMemory(Teleports.CurrentYOffSet, "float", Teleports.ManualY.ToString());
-            WriteToMemory(Teleports.CurrentZOffSet, "float", Teleports.ManualZ.ToString());
+            WriteMemory(false, Teleports.CurrentXPointer, "float", Teleports.ManualX.ToString());
+            WriteMemory(false, Teleports.CurrentYPointer, "float", Teleports.ManualY.ToString());
+            WriteMemory(false, Teleports.CurrentZPointer, "float", Teleports.ManualZ.ToString());
         }
 
         private void txtManualX_KeyPress(object sender, KeyPressEventArgs e) { ValidateInput(sender, e); }
@@ -135,9 +136,9 @@ namespace Aurora_BlackOps1_Zombies.Core.Menu.Panels
 
         private void btnTeleportLocation1_Click(object sender, EventArgs e)
         {
-            WriteToMemory(Teleports.CurrentXOffSet, "float", Teleports.SavedLocation1X.ToString());
-            WriteToMemory(Teleports.CurrentYOffSet, "float", Teleports.SavedLocation1Y.ToString());
-            WriteToMemory(Teleports.CurrentZOffSet, "float", Teleports.SavedLocation1Z.ToString());
+            WriteMemory(false, Teleports.CurrentXPointer, "float", Teleports.SavedLocation1X.ToString());
+            WriteMemory(false, Teleports.CurrentYPointer, "float", Teleports.SavedLocation1Y.ToString());
+            WriteMemory(false, Teleports.CurrentZPointer, "float", Teleports.SavedLocation1Z.ToString());
         }
         #endregion
         #region Location 2
@@ -173,9 +174,9 @@ namespace Aurora_BlackOps1_Zombies.Core.Menu.Panels
 
         private void btnTeleportLocation2_Click(object sender, EventArgs e)
         {
-            WriteToMemory(Teleports.CurrentXOffSet, "float", Teleports.SavedLocation2X.ToString());
-            WriteToMemory(Teleports.CurrentYOffSet, "float", Teleports.SavedLocation2Y.ToString());
-            WriteToMemory(Teleports.CurrentZOffSet, "float", Teleports.SavedLocation2Z.ToString());
+            WriteMemory(false, Teleports.CurrentXPointer, "float", Teleports.SavedLocation2X.ToString());
+            WriteMemory(false, Teleports.CurrentYPointer, "float", Teleports.SavedLocation2Y.ToString());
+            WriteMemory(false, Teleports.CurrentZPointer, "float", Teleports.SavedLocation2Z.ToString());
         }
         #endregion
         #region Proper Closing

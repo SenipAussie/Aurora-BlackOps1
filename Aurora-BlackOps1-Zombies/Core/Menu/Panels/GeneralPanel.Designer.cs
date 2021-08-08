@@ -140,7 +140,6 @@ namespace Aurora_BlackOps1_Zombies.Core.Menu.Panels
             this.pnlBackGod = new System.Windows.Forms.Panel();
             this.pnlGod = new System.Windows.Forms.Panel();
             this.PersistantHealth = new System.Windows.Forms.Timer(this.components);
-            this.PersistantHealth_ = new System.ComponentModel.BackgroundWorker();
             this.pnlMPTopRight.SuspendLayout();
             this.pnlWPTopRight.SuspendLayout();
             this.pnlBackAntiMoveBox.SuspendLayout();
@@ -1525,6 +1524,11 @@ namespace Aurora_BlackOps1_Zombies.Core.Menu.Panels
             this.pnlGod.TabIndex = 1;
             this.pnlGod.Click += new System.EventHandler(this.pnlGod_Click);
             // 
+            // PersistantHealth
+            // 
+            this.PersistantHealth.Interval = 50;
+            this.PersistantHealth.Tick += new System.EventHandler(this.PersistantHealth_Tick);
+            // 
             // GeneralPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1687,6 +1691,5 @@ namespace Aurora_BlackOps1_Zombies.Core.Menu.Panels
         private System.Windows.Forms.Panel pnlBackGod;
         private System.Windows.Forms.Panel pnlGod;
         private System.Windows.Forms.Timer PersistantHealth;
-        private System.ComponentModel.BackgroundWorker PersistantHealth_;
     }
 }

@@ -9,7 +9,8 @@ namespace Aurora_BlackOps1_Zombies
         [STAThread]
         static void Main()
         {
-            if (!MemoryHandler.isOpen())
+            ProcessHandler.getProcessInfo();
+            if (!ProcessHandler.isOpen())
             {
                 MessageBox.Show("BlackOps.exe is not Running!");
                 Environment.Exit(0);

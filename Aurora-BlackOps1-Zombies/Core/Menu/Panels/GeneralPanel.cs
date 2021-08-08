@@ -3,7 +3,7 @@ using System.Windows.Forms;
 using static Aurora_BlackOps1_Zombies.Core.Data.MemoryHandler;
 using static Aurora_BlackOps1_Zombies.Core.Data.Variables.Menu;
 using static Aurora_BlackOps1_Zombies.Core.Data.Variables;
-using System.Threading;
+using static Aurora_BlackOps1_Zombies.Core.Data.DLLImports;
 
 namespace Aurora_BlackOps1_Zombies.Core.Menu.Panels
 {
@@ -12,6 +12,8 @@ namespace Aurora_BlackOps1_Zombies.Core.Menu.Panels
         public GeneralPanel()
         {
             InitializeComponent();
+            Data.ProcessHandler.getProcessInfo();
+            PersistantHealth.Start();
         }
         #region Player Form Controls
         private void pnlThirdPerson_Click(object sender, EventArgs e)
@@ -19,12 +21,12 @@ namespace Aurora_BlackOps1_Zombies.Core.Menu.Panels
             if (!Player.ThirdPerson)
             {
                 pnlThirdPerson.BackColor = EnabledButton;
-                WriteToMemory(Player.ThirdPersonOffSet, "int", "1");
+                WriteMemory(true, Player.ThirdPersonPointer, "int", "1");
             }
             else
             {
                 pnlThirdPerson.BackColor = DisabledButton;
-                WriteToMemory(Player.ThirdPersonOffSet, "int", "0");
+                WriteMemory(true, Player.ThirdPersonPointer, "int", "0");
             }
             Player.ThirdPerson = !Player.ThirdPerson;
         }
@@ -34,12 +36,12 @@ namespace Aurora_BlackOps1_Zombies.Core.Menu.Panels
             if (!Player.NoClip)
             {
                 pnlNoClip.BackColor = EnabledButton;
-                WriteToMemory(Player.NoClipOffSet, "int", "1");
+                WriteMemory(true, Player.NoClipPointer, "int", "1");
             }
             else
             {
                 pnlNoClip.BackColor = DisabledButton;
-                WriteToMemory(Player.NoClipOffSet, "int", "0");
+                WriteMemory(true, Player.NoClipPointer, "int", "0");
             }
             Player.NoClip = !Player.NoClip;
         }
@@ -48,12 +50,12 @@ namespace Aurora_BlackOps1_Zombies.Core.Menu.Panels
             if (!Player.GodMode)
             {
                 pnlGod.BackColor = EnabledButton;
-                WriteToMemory(Player.GodModeOffSet, "int", "2081");
+                WriteMemory(true, Player.GodModePointer, "int", "2081");
             }
             else
             {
                 pnlGod.BackColor = DisabledButton;
-                WriteToMemory(Player.GodModeOffSet, "int", "2080");
+                WriteMemory(true, Player.GodModePointer, "int", "2080");
             }
             Player.GodMode = !Player.GodMode;
         }
@@ -75,7 +77,7 @@ namespace Aurora_BlackOps1_Zombies.Core.Menu.Panels
         {
             if (txtHealth.TextLength < 1)
                 txtHealth.Text = "0";
-            WriteToMemory(Player.HealthOffset, "int", txtHealth.Text);
+            WriteMemory(false, Player.HealthPointer, "int", txtHealth.Text);
         }
 
         private void txtCash_KeyPress(object sender, KeyPressEventArgs e)
@@ -87,7 +89,7 @@ namespace Aurora_BlackOps1_Zombies.Core.Menu.Panels
         {
             if (txtCash.TextLength < 1)
                 txtCash.Text = "0";
-            WriteToMemory(Player.CashOffSet, "int", txtCash.Text);
+            WriteMemory(false, Player.CashPointer, "int", txtCash.Text);
         }
 
         private void txtPlayerSpeed_KeyPress(object sender, KeyPressEventArgs e)
@@ -99,20 +101,20 @@ namespace Aurora_BlackOps1_Zombies.Core.Menu.Panels
         {
             if (txtPlayerSpeed.TextLength < 1)
                 txtPlayerSpeed.Text = "0";
-            WriteToMemory(Player.PlayerSpeedOffSet, "int", txtPlayerSpeed.Text);
+            WriteMemory(true, Player.PlayerSpeedPointer, "int", txtPlayerSpeed.Text);
         }
         #endregion
         #region Weapon Form Controls
         private void cboPrimary_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cboPrimary.SelectedIndex != -1)
-                WriteToMemory(Weapons.PrimaryOffSet, "int", cboPrimary.SelectedIndex.ToString());
+                WriteMemory(true, Weapons.PrimaryPointer, "int", cboPrimary.SelectedIndex.ToString());
         }
 
         private void cboSecondary_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cboSecondary.SelectedIndex != -1)
-                WriteToMemory(Weapons.SecondaryOffSet, "int", cboSecondary.SelectedIndex.ToString());
+                WriteMemory(true, Weapons.SecondaryPointer, "int", cboSecondary.SelectedIndex.ToString());
         }
 
         private void pnlUnlimitedAmmo_Click(object sender, EventArgs e)
@@ -120,12 +122,12 @@ namespace Aurora_BlackOps1_Zombies.Core.Menu.Panels
             if (!Weapons.UnlimitedAmmo)
             {
                 pnlUnlimitedAmmo.BackColor = EnabledButton;
-                WriteToMemory(Weapons.UnlimitedAmmoOffSet, "bytes", "90 90 90");
+                WriteMemory(true, Weapons.UnlimitedAmmoPointer, "bytes", "90 90 90");
             }
             else
             {
                 pnlUnlimitedAmmo.BackColor = DisabledButton;
-                WriteToMemory(Weapons.UnlimitedAmmoOffSet, "bytes", "89 50 04");
+                WriteMemory(true, Weapons.UnlimitedAmmoPointer, "bytes", "89 50 04");
             }
             Weapons.UnlimitedAmmo = !Weapons.UnlimitedAmmo;
         }
@@ -135,12 +137,12 @@ namespace Aurora_BlackOps1_Zombies.Core.Menu.Panels
             if (!Weapons.NoRecoil)
             {
                 pnlNoRecoil.BackColor = EnabledButton;
-                WriteToMemory(Weapons.NoRecoilOffSet, "int", "117");
+                WriteMemory(false, Weapons.NoRecoilPointer, "int", "117");
             }
             else
             {
                 pnlNoRecoil.BackColor = DisabledButton;
-                WriteToMemory(Weapons.NoRecoilOffSet, "int", "116");
+                WriteMemory(false, Weapons.NoRecoilPointer, "int", "116");
             }
             Weapons.NoRecoil = !Weapons.NoRecoil;
         }
@@ -150,22 +152,22 @@ namespace Aurora_BlackOps1_Zombies.Core.Menu.Panels
             if (!Weapons.NoSpread)
             {
                 pnlNoSpread.BackColor = EnabledButton;
-                WriteToMemory(Weapons.NoSpreadOffSet, "bytes", "90 90 90 90 90 90 90 90");
-                WriteToMemory(Weapons.NoSpreadOffSet2, "bytes", "0F 84 EF 02 00 00");
-                WriteToMemory(Weapons.NoSpreadOffSet3, "bytes", "90 90 90 90 90 90 90 90");
-                WriteToMemory(Weapons.NoSpreadOffSet4, "bytes", "90 90 90 90 90 90 90 90");
-                WriteToMemory(Weapons.NoSpreadOffSet5, "bytes", "90 90 90 90 90 90 90 90");
-                WriteToMemory(Weapons.NoSpreadOffSet6, "bytes", "F3 0F 10 90 00 04 00 00");
+                WriteMemory(true, Weapons.NoSpreadPointer, "bytes", "90 90 90 90 90 90 90 90");
+                WriteMemory(true, Weapons.NoSpreadPointer2, "bytes", "0F 84 EF 02 00 00");
+                WriteMemory(true, Weapons.NoSpreadPointer3, "bytes", "90 90 90 90 90 90 90 90");
+                WriteMemory(true, Weapons.NoSpreadPointer4, "bytes", "90 90 90 90 90 90 90 90");
+                WriteMemory(true, Weapons.NoSpreadPointer5, "bytes", "90 90 90 90 90 90 90 90");
+                WriteMemory(true, Weapons.NoSpreadPointer6, "bytes", "F3 0F 10 90 00 04 00 00");
             }
             else
             {
                 pnlNoSpread.BackColor = DisabledButton;
-                WriteToMemory(Weapons.NoSpreadOffSet, "bytes", "F3 0F 11 86 2C 05 00 00");
-                WriteToMemory(Weapons.NoSpreadOffSet2, "bytes", "0F 8B EF 02 00 00");
-                WriteToMemory(Weapons.NoSpreadOffSet3, "bytes", "F3 0F 11 8E 2C 05 00 00");
-                WriteToMemory(Weapons.NoSpreadOffSet4, "bytes", "F3 0F 11 80 2C 05 00 00");
-                WriteToMemory(Weapons.NoSpreadOffSet5, "bytes", "F3 0F 11 88 2C 05 00 00");
-                WriteToMemory(Weapons.NoSpreadOffSet6, "bytes", "F3 0F 10 90 CC 04 00 00");
+                WriteMemory(true, Weapons.NoSpreadPointer, "bytes", "F3 0F 11 86 2C 05 00 00");
+                WriteMemory(true, Weapons.NoSpreadPointer2, "bytes", "0F 8B EF 02 00 00");
+                WriteMemory(true, Weapons.NoSpreadPointer3, "bytes", "F3 0F 11 8E 2C 05 00 00");
+                WriteMemory(true, Weapons.NoSpreadPointer4, "bytes", "F3 0F 11 80 2C 05 00 00");
+                WriteMemory(true, Weapons.NoSpreadPointer5, "bytes", "F3 0F 11 88 2C 05 00 00");
+                WriteMemory(true, Weapons.NoSpreadPointer6, "bytes", "F3 0F 10 90 CC 04 00 00");
             }
             Weapons.NoSpread = !Weapons.NoSpread;
         }
@@ -175,12 +177,12 @@ namespace Aurora_BlackOps1_Zombies.Core.Menu.Panels
             if (!Weapons.NoRecoilAnimation)
             {
                 pnlNoAnimations.BackColor = EnabledButton;
-                WriteToMemory(Weapons.NoRecoilAnimationOffSet, "bytes", "90 90 90 90 90 90");
+                WriteMemory(true, Weapons.NoRecoilAnimationPointer, "bytes", "90 90 90 90 90 90");
             }
             else
             {
                 pnlNoAnimations.BackColor = DisabledButton;
-                WriteToMemory(Weapons.NoRecoilAnimationOffSet, "bytes", "89 96 24 05 00 00");
+                WriteMemory(true, Weapons.NoRecoilAnimationPointer, "bytes", "89 96 24 05 00 00");
             }
             Weapons.NoRecoilAnimation = !Weapons.NoRecoilAnimation;
         }
@@ -190,14 +192,14 @@ namespace Aurora_BlackOps1_Zombies.Core.Menu.Panels
             if (!Weapons.NoGunKick)
             {
                 pnlNoKick.BackColor = EnabledButton;
-                WriteToMemory(Weapons.NoGunKickOffSet, "bytes", "90 90 90 90 90");
-                WriteToMemory(Weapons.NoGunKickOffSet2, "bytes", "90 90 90 90 90");
+                WriteMemory(true, Weapons.NoGunKickPointer, "bytes", "90 90 90 90 90");
+                WriteMemory(true, Weapons.NoGunKickPointer2, "bytes", "90 90 90 90 90");
             }
             else
             {
                 pnlNoKick.BackColor = DisabledButton;
-                WriteToMemory(Weapons.NoGunKickOffSet, "bytes", "F3 0F 11 49 30");
-                WriteToMemory(Weapons.NoGunKickOffSet2, "bytes", "F3 0F 11 51 34");
+                WriteMemory(true, Weapons.NoGunKickPointer, "bytes", "F3 0F 11 49 30");
+                WriteMemory(true, Weapons.NoGunKickPointer2, "bytes", "F3 0F 11 51 34");
             }
             Weapons.NoGunKick = !Weapons.NoGunKick;
         }
@@ -207,12 +209,12 @@ namespace Aurora_BlackOps1_Zombies.Core.Menu.Panels
             if (!Weapons.LongKnife)
             {
                 pnlLongKnife.BackColor = EnabledButton;
-                WriteToMemory(Weapons.LongKnifeOffSet, "float", "9999");
+                WriteMemory(true, Weapons.LongKnifePointer, "float", "9999");
             }
             else
             {
                 pnlLongKnife.BackColor = DisabledButton;
-                WriteToMemory(Weapons.LongKnifeOffSet, "float", "90");
+                WriteMemory(true, Weapons.LongKnifePointer, "float", "90");
             }
             Weapons.LongKnife = !Weapons.LongKnife;
         }
@@ -222,12 +224,12 @@ namespace Aurora_BlackOps1_Zombies.Core.Menu.Panels
             if (!Weapons.RapidFire)
             {
                 pnlRapidFire.BackColor = EnabledButton;
-                WriteToMemory(Weapons.RapidFireOffSet, "bytes", "90 90");
+                WriteMemory(true, Weapons.RapidFirePointer, "bytes", "90 90");
             }
             else
             {
                 pnlRapidFire.BackColor = DisabledButton;
-                WriteToMemory(Weapons.RapidFireOffSet, "bytes", "89 10");
+                WriteMemory(true, Weapons.RapidFirePointer, "bytes", "89 10");
             }
             Weapons.RapidFire = !Weapons.RapidFire;
         }
@@ -241,7 +243,7 @@ namespace Aurora_BlackOps1_Zombies.Core.Menu.Panels
         {
             if (txtPrimaryAmmo.TextLength < 0)
                 txtPrimaryAmmo.Text = "0";
-            WriteToMemory(Weapons.PrimaryAmmoOffset, "int", txtPrimaryAmmo.Text);
+            WriteMemory(true, Weapons.PrimaryAmmoPointer, "int", txtPrimaryAmmo.Text);
         }
 
         private void txtPrimaryAmmoSpare_KeyPress(object sender, KeyPressEventArgs e)
@@ -253,7 +255,7 @@ namespace Aurora_BlackOps1_Zombies.Core.Menu.Panels
         {
             if (txtPrimaryAmmoSpare.TextLength < 0)
                 txtPrimaryAmmoSpare.Text = "0";
-            WriteToMemory(Weapons.PrimaryAmmoSpareOffset, "int", txtPrimaryAmmoSpare.Text);
+            WriteMemory(true, Weapons.PrimaryAmmoSparePointer, "int", txtPrimaryAmmoSpare.Text);
         }
 
         private void txtSecondaryAmmo_KeyPress(object sender, KeyPressEventArgs e)
@@ -265,7 +267,7 @@ namespace Aurora_BlackOps1_Zombies.Core.Menu.Panels
         {
             if (txtSecondaryAmmo.TextLength < 0)
                 txtSecondaryAmmo.Text = "0";
-            WriteToMemory(Weapons.SecondaryAmmoOffset, "int", txtSecondaryAmmo.Text);
+            WriteMemory(true, Weapons.SecondaryAmmoPointer, "int", txtSecondaryAmmo.Text);
         }
 
         private void txtSecondaryAmmoSpare_KeyPress(object sender, KeyPressEventArgs e)
@@ -277,7 +279,7 @@ namespace Aurora_BlackOps1_Zombies.Core.Menu.Panels
         {
             if (txtSecondaryAmmo.TextLength < 0)
                 txtSecondaryAmmo.Text = "0";
-            WriteToMemory(Weapons.SecondaryAmmoSpareOffset, "int", txtSecondaryAmmoSpare.Text);
+            WriteMemory(true, Weapons.SecondaryAmmoSparePointer, "int", txtSecondaryAmmoSpare.Text);
         }
         #endregion
         #region Visual Form Controls
@@ -286,12 +288,12 @@ namespace Aurora_BlackOps1_Zombies.Core.Menu.Panels
             if (!Visuals.FullBright)
             {
                 pnlFullBright.BackColor = EnabledButton;
-                WriteToMemory(Visuals.FullBrightOffSet, "int", "4");
+                WriteMemory(false, Visuals.FullBrightPointer, "int", "4");
             }
             else
             {
                 pnlFullBright.BackColor = DisabledButton;
-                WriteToMemory(Visuals.FullBrightOffSet, "int", "-16120566");
+                WriteMemory(false, Visuals.FullBrightPointer, "int", "-16120566");
             }
             Visuals.FullBright = !Visuals.FullBright;
         }
@@ -301,12 +303,12 @@ namespace Aurora_BlackOps1_Zombies.Core.Menu.Panels
             if (!Visuals.Colorized)
             {
                 pnlColorized.BackColor = EnabledButton;
-                WriteToMemory(Visuals.ColorizedOffSet, "int", "2");
+                WriteMemory(false, Visuals.ColorizedPointer, "int", "2");
             }
             else
             {
                 pnlColorized.BackColor = DisabledButton;
-                WriteToMemory(Visuals.ColorizedOffSet, "int", "3");
+                WriteMemory(false, Visuals.ColorizedPointer, "int", "3");
             }
             Visuals.Colorized = !Visuals.Colorized;
         }
@@ -316,12 +318,12 @@ namespace Aurora_BlackOps1_Zombies.Core.Menu.Panels
             if (!Visuals.NoFog)
             {
                 pnlNoFog.BackColor = EnabledButton;
-                WriteToMemory(Visuals.NoFogOffSet, "int", "0");
+                WriteMemory(true, Visuals.NoFogPointer, "int", "0");
             }
             else
             {
                 pnlNoFog.BackColor = DisabledButton;
-                WriteToMemory(Visuals.NoFogOffSet, "int", "1");
+                WriteMemory(true, Visuals.NoFogPointer, "int", "1");
             }
             Visuals.NoFog = !Visuals.NoFog;
         }
@@ -331,12 +333,12 @@ namespace Aurora_BlackOps1_Zombies.Core.Menu.Panels
             if (!Visuals.UnlockFPS)
             {
                 pnlUnlockFPS.BackColor = EnabledButton;
-                WriteToMemory(Visuals.UnlockFPSOffSet, "int", "144");
+                WriteMemory(true, Visuals.UnlockFPSPointer, "int", "144");
             }
             else
             {
                 pnlUnlockFPS.BackColor = DisabledButton;
-                WriteToMemory(Visuals.UnlockFPSOffSet, "int", "85");
+                WriteMemory(true, Visuals.UnlockFPSPointer, "int", "85");
             }
             Visuals.UnlockFPS = !Visuals.UnlockFPS;
         }
@@ -346,12 +348,12 @@ namespace Aurora_BlackOps1_Zombies.Core.Menu.Panels
             if (!Visuals.ShowHud)
             {
                 pnlHideHUD.BackColor = EnabledButton;
-                WriteToMemory(Visuals.ShowHudOffSet, "int", "0");
+                WriteMemory(true, Visuals.ShowHudPointer, "int", "0");
             }
             else
             {
                 pnlHideHUD.BackColor = DisabledButton;
-                WriteToMemory(Visuals.ShowHudOffSet, "int", "1");
+                WriteMemory(true, Visuals.ShowHudPointer, "int", "1");
             }
             Visuals.ShowHud = !Visuals.ShowHud;
         }
@@ -365,7 +367,7 @@ namespace Aurora_BlackOps1_Zombies.Core.Menu.Panels
         {
             if (txtFOV.TextLength < 0)
                 txtFOV.Text = "0";
-            WriteToMemory(Visuals.FOVOffSet, "float", txtFOV.Text);
+            WriteMemory(true, Visuals.FOVOffSet, "float", txtFOV.Text);
         }
 
         private void txtKills_KeyPress(object sender, KeyPressEventArgs e)
@@ -377,7 +379,7 @@ namespace Aurora_BlackOps1_Zombies.Core.Menu.Panels
         {
             if (txtKills.TextLength < 0)
                 txtKills.Text = "0";
-            WriteToMemory(Visuals.ScoreBoardKillsOffSet, "int", txtKills.Text);
+            WriteMemory(false, Visuals.ScoreBoardKillsPointer, "int", txtKills.Text);
         }
 
         private void txtHeadshots_KeyPress(object sender, KeyPressEventArgs e)
@@ -389,7 +391,7 @@ namespace Aurora_BlackOps1_Zombies.Core.Menu.Panels
         {
             if (txtHeadshots.TextLength < 0)
                 txtHeadshots.Text = "0";
-            WriteToMemory(Visuals.ScoreBoardHeadShotsOffSet, "int", txtHeadshots.Text);
+            WriteMemory(false, Visuals.ScoreBoardHeadShotsPointer, "int", txtHeadshots.Text);
         }
         #endregion
         #region World Form Controls
@@ -398,12 +400,12 @@ namespace Aurora_BlackOps1_Zombies.Core.Menu.Panels
             if (!World.AntiMoveBox)
             {
                 pnlAntiMoveBox.BackColor = EnabledButton;
-                WriteToMemory(World.AntiMoveBoxOffSet, "int", "50759780");
+                WriteMemory(true, World.AntiMoveBoxPointer, "int", "50759780");
             }
             else
             {
                 pnlAntiMoveBox.BackColor = DisabledButton;
-                WriteToMemory(World.AntiMoveBoxOffSet, "int", "50759716");
+                WriteMemory(true, World.AntiMoveBoxPointer, "int", "50759716");
             }
             World.AntiMoveBox = !World.AntiMoveBox;
         }
@@ -417,7 +419,7 @@ namespace Aurora_BlackOps1_Zombies.Core.Menu.Panels
         {
             if (txtWorldSpeed.TextLength < 1)
                 txtWorldSpeed.Text = "0";
-            WriteToMemory(World.TimeScaleOffSet, "int", txtWorldSpeed.Text);
+            WriteMemory(true, World.TimeScalePointer, "int", txtWorldSpeed.Text);
         }
 
         private void txtWorldGravity_KeyPress(object sender, KeyPressEventArgs e)
@@ -429,7 +431,7 @@ namespace Aurora_BlackOps1_Zombies.Core.Menu.Panels
         {
             if (txtWorldGravity.TextLength < 1)
                 txtWorldGravity.Text = "0";
-            WriteToMemory(World.GravityOffSet, "float", txtWorldGravity.Text);
+            WriteMemory(true, World.GravityPointer, "float", txtWorldGravity.Text);
         }
         #endregion
         #region Zombie Form Controls
@@ -438,14 +440,14 @@ namespace Aurora_BlackOps1_Zombies.Core.Menu.Panels
             if (!Zombies.FreezeZombies)
             {
                 pnlFreezeZombies.BackColor = EnabledButton;
-                WriteToMemory(Zombies.FreezeZombiesOffSet, "bytes", "90 90 90");
-                WriteToMemory(Zombies.FreezeZombiesOffSet2, "bytes", "90 90 90 90 90 90");
+                WriteMemory(true, Zombies.FreezeZombiesPointer, "bytes", "90 90 90");
+                WriteMemory(true, Zombies.FreezeZombiesPointer2, "bytes", "90 90 90 90 90 90");
             }
             else
             {
                 pnlFreezeZombies.BackColor = DisabledButton;
-                WriteToMemory(Zombies.FreezeZombiesOffSet, "bytes", "D9 58 04");
-                WriteToMemory(Zombies.FreezeZombiesOffSet2, "bytes", "D9 98 1C 01 00 00");
+                WriteMemory(true, Zombies.FreezeZombiesPointer, "bytes", "D9 58 04");
+                WriteMemory(true, Zombies.FreezeZombiesPointer2, "bytes", "D9 98 1C 01 00 00");
             }
             Zombies.FreezeZombies = !Zombies.FreezeZombies;
         }
@@ -455,15 +457,15 @@ namespace Aurora_BlackOps1_Zombies.Core.Menu.Panels
             if (!Zombies.ZombieGravity)
             {
                 pnlZombieGravity.BackColor = EnabledButton;
-                WriteToMemory(Zombies.ZombieGravityOffSet, "float", "-50");
+                WriteMemory(true, Zombies.ZombieGravityPointer, "float", "-50");
             }
             else
             {
                 pnlZombieGravity.BackColor = DisabledButton;
                 if (Zombies.FloatingZombies)
-                    WriteToMemory(Zombies.ZombieGravityOffSet, "float", "99");
+                    WriteMemory(true, Zombies.ZombieGravityPointer, "float", "99");
                 else
-                    WriteToMemory(Zombies.ZombieGravityOffSet, "float", "-800");
+                    WriteMemory(true, Zombies.ZombieGravityPointer, "float", "-800");
             }
             Zombies.ZombieGravity = !Zombies.ZombieGravity;
         }
@@ -473,15 +475,15 @@ namespace Aurora_BlackOps1_Zombies.Core.Menu.Panels
             if (!Zombies.FloatingZombies)
             {
                 pnlFloatingZombies.BackColor = EnabledButton;
-                WriteToMemory(Zombies.FloatingZombiesOffSet, "float", "99");
+                WriteMemory(true, Zombies.FloatingZombiesPointer, "float", "99");
             }
             else
             {
                 pnlFloatingZombies.BackColor = DisabledButton;
                 if (Zombies.ZombieGravity)
-                    WriteToMemory(Zombies.FloatingZombiesOffSet, "float", "-50");
+                    WriteMemory(true, Zombies.FloatingZombiesPointer, "float", "-50");
                 else
-                    WriteToMemory(Zombies.FloatingZombiesOffSet, "float", "-800");
+                    WriteMemory(true, Zombies.FloatingZombiesPointer, "float", "-800");
             }
             Zombies.FloatingZombies = !Zombies.FloatingZombies;
         }
@@ -490,5 +492,16 @@ namespace Aurora_BlackOps1_Zombies.Core.Menu.Panels
         private void GeneralPanel_FormClosing(object sender, FormClosingEventArgs e)
         { PersistantHealth.Dispose(); }
         #endregion
+
+        private void PersistantHealth_Tick(object sender, EventArgs e)
+        {
+            if(GetAsyncKeyState(Keys.Space) < 0)
+            {
+                float oldV = ReadFloat(true, Player.FlyHackPointer) + 50;
+                WriteMemory(true, Player.FlyHackPointer, "float", oldV.ToString());
+            }
+            if(txtHealth.Text != "100")
+                WriteMemory(false, Player.HealthPointer, "int", txtHealth.Text);
+        }
     }
 }
