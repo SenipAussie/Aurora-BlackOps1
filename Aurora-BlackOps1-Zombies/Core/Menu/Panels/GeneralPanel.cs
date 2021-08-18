@@ -13,7 +13,6 @@ namespace Aurora_BlackOps1_Zombies.Core.Menu.Panels
         {
             InitializeComponent();
             Data.ProcessHandler.getProcessInfo();
-            PersistantHealth.Start();
         }
         #region Player Form Controls
         private void pnlThirdPerson_Click(object sender, EventArgs e)
@@ -62,7 +61,11 @@ namespace Aurora_BlackOps1_Zombies.Core.Menu.Panels
         private void pnlFlyHack_Click(object sender, EventArgs e)
         {
             if (!Player.FlyHack)
+            {
+                if (!PersistantHealth.Enabled)
+                    PersistantHealth.Start();
                 pnlFlyHack.BackColor = EnabledButton;
+            }
             else
                 pnlFlyHack.BackColor = DisabledButton;
             Player.FlyHack = !Player.FlyHack;
@@ -78,6 +81,8 @@ namespace Aurora_BlackOps1_Zombies.Core.Menu.Panels
             if (txtHealth.TextLength < 1)
                 txtHealth.Text = "0";
             WriteMemory(false, Player.HealthPointer, "int", txtHealth.Text);
+            if (!PersistantHealth.Enabled)
+                PersistantHealth.Start();
         }
 
         private void txtCash_KeyPress(object sender, KeyPressEventArgs e)
@@ -495,13 +500,15 @@ namespace Aurora_BlackOps1_Zombies.Core.Menu.Panels
 
         private void PersistantHealth_Tick(object sender, EventArgs e)
         {
-            if(GetAsyncKeyState(Keys.Space) < 0)
+            if(GetAsyncKeyState(Keys.Space) < 0 && Player.FlyHack)
             {
                 float oldV = ReadFloat(true, Player.FlyHackPointer) + 50;
                 WriteMemory(true, Player.FlyHackPointer, "float", oldV.ToString());
             }
             if(txtHealth.Text != "100")
                 WriteMemory(false, Player.HealthPointer, "int", txtHealth.Text);
+            if (txtHealth.Text == "100" && !Player.FlyHack)
+                PersistantHealth.Stop();
         }
     }
 }
